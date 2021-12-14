@@ -4,7 +4,7 @@ import React, {
     useLayoutEffect,
     useCallback
   } from 'react';
-  import { TouchableOpacity, Text } from 'react-native';
+  import { TouchableOpacity, Text, TextInput,StyleSheet ,Button} from 'react-native';
   import { GiftedChat } from 'react-native-gifted-chat';
   import {
     collection,
@@ -19,11 +19,14 @@ import React, {
   
   export default function Chat({ navigation }) {
     const [messages, setMessages] = useState([]);
+    const [username, setUsername] = useState("");
+    const [showChat, setShowChat] = useState(false);
   
     const onSignOut = () => {
       signOut(auth).catch(error => console.log('Error logging out: ', error));
     };
   
+
     useLayoutEffect(() => {
       navigation.setOptions({
         headerRight: () => (
@@ -74,8 +77,33 @@ import React, {
         user
       });
     }, []);
+
+
+    const onHandleUsername = () => {
+      if(username.trim().length >=4 && username.trim() !== "")
+      {
+        setShowChat(true)
+      }
+    };
   
-    return (
+  
+  return (
+    !showChat ? 
+     ( 
+       <>
+      <TextInput
+          style={styles.input}
+          placeholder='Enter username to begin chat ...'
+          autoCapitalize='none'
+          keyboardType='username'
+          textContentType='username'
+          value={username}
+          onChangeText={text => setUsername(text)} 
+        />
+      <Button onPress={onHandleUsername} color='#28a745' title='Start Chat' />
+      </>
+     )
+            :
       <GiftedChat
         messages={messages}
         showAvatarForEveryMessage={true}
@@ -84,8 +112,20 @@ import React, {
         user={{
           _id: auth?.currentUser?.email,
           avatar: 'https://i.pravatar.cc/300',
-          name: auth?.currentUser?.email.split("@")[0]
+          name: username??auth?.currentUser?.email.split("@")[0]
         }}
       />
     );
   }
+
+  const styles = StyleSheet.create({
+    input: {
+      backgroundColor: '#fff',
+      marginBottom: 20,
+      fontSize: 16,
+      borderWidth: 1,
+      borderColor: '#333',
+      borderRadius: 8,
+      padding: 12
+    }
+  });

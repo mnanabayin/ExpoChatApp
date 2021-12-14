@@ -6,9 +6,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import { auth } from './config/firebase';
 
-import Login from './screens/Login';
-import Signup from './screens/Signup';
-import Chat from './screens/Chat';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Chat from './components/Chat';
+
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ function ChatStack() {
     </Stack.Navigator>
   );
 }
+
 
 function AuthStack() {
   return (

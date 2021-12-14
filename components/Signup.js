@@ -1,33 +1,40 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from '../config/firebase';
 
-export default function Login({ navigation }) {
+export default function Signup({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-  const onHandleLogin = () => {
-    if (email !== '' && password !== '') {
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => console.log('Login success'))
-        .catch(err => console.log(`Login err: ${err}`));
+  const onHandleSignup = () => {
+    if (email !== '' && (email.match(/@/g) || []).length===1 && email.includes("@") && email.length >3 && password !== '' && password.length >=6) {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => console.log('Signup success'))
+        .catch(err =>  /*console.log(`Sign Up err: ${err}`)*/  setError("Unexpected server error. Try again later."));
+    }
+    else{
+      setError("Email and Password cannot be empty.Valid email is required. Password must be min. 6 characters.")
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome back!</Text>
+      <Text style={styles.title}>Create new account</Text>
+      {!!error && (
+          <Text style={{ color: "red" }}>{error}</Text>
+        )}
       <TextInput
         style={styles.input}
         placeholder='Enter email'
         autoCapitalize='none'
         keyboardType='email-address'
         textContentType='emailAddress'
-        autoFocus={true}
         value={email}
-        onChangeText={text => setEmail(text)}
+        onChangeText={text => setEmail(text)} 
+       
       />
       <TextInput
         style={styles.input}
@@ -39,10 +46,10 @@ export default function Login({ navigation }) {
         value={password}
         onChangeText={text => setPassword(text)}
       />
-      <Button onPress={onHandleLogin} color='#f57c00' title='Login' />
+      <Button onPress={onHandleSignup} color='#f57c00' title='Signup' />
       <Button
-        onPress={() => navigation.navigate('Signup')}
-        title='Go to Signup'
+        onPress={() => navigation.navigate('Login')}
+        title='Go to Login'
       />
     </View>
   );
