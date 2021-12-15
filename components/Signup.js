@@ -16,7 +16,7 @@ export default function Signup({ navigation }) {
         .catch(err =>  /*console.log(`Sign Up err: ${err}`)*/  setError("Unexpected server error. Try again later."));
     }
     else{
-      setError("Email and Password cannot be empty.Valid email is required. Password must be min. 6 characters.")
+      setError("Email and Password cannot be empty. Valid email is required. Password must be min. 6 characters.")
     }
   };
 

@@ -22,7 +22,7 @@ export default function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome back!</Text>
+      <Text style={styles.title}>Welcome back! Login here.</Text>
       {!!error && (
           <Text style={{ color: "red" }}>{error}</Text>
         )}
