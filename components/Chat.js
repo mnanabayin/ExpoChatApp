@@ -25,13 +25,13 @@ import React, {
     const [showChat, setShowChat] = useState(false);
     const [onlineStatuses, setOnlineStatuses] = useState([]);
   
+    //signing out auth
     const onSignOut = () => {
-     
-       //delete online presence
       localStorage.removeItem("createdUsername")
       signOut(auth)
       .catch(error => console.log('Error logging out: ', error));
 
+      //remove online presence
       const collectionRef = collection(database, 'online');
       const q = query(collectionRef, where('userId',"==", auth?.currentUser?.uid));
       const unsubscribe = onSnapshot(q, querySnapshot => {
@@ -44,7 +44,7 @@ import React, {
     };
   
 
-     //online statuses
+     //get online statuses
      useEffect(() => {
       const collectionRef = collection(database, 'online');
       const q = query(collectionRef, orderBy('createdAt', 'asc'));
@@ -74,12 +74,14 @@ import React, {
       });
     }, [navigation]);
   
+
      useEffect(() => {
       if(localStorage.getItem("createdUsername") !== null && auth !== null){
         setShowChat(true)
       }  
      }, []);
   
+     //get chats
     useLayoutEffect(() => {
       const collectionRef = collection(database, 'chats');
       const q = query(collectionRef, orderBy('createdAt', 'desc'));
