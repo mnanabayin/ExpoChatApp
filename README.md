@@ -1,10 +1,10 @@
 # ExpoChatApp
-Created with React Native and Firebase
+Real time chat app created with React Native and Firebase
 
 # Screens
-Signup
-Login
-Chat
+* Signup
+* Login
+* Chat ( with Online presence screen )
 
 #To do
 * Create a firebase project.
