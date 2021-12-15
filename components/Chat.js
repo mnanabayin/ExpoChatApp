@@ -11,7 +11,8 @@ import React, {
     addDoc,
     orderBy,
     query,
-    onSnapshot
+    onSnapshot,
+    deleteDoc
   } from 'firebase/firestore';
   import { signOut } from 'firebase/auth';
   
@@ -23,6 +24,9 @@ import React, {
     const [showChat, setShowChat] = useState(false);
   
     const onSignOut = () => {
+      localStorage.removeItem("createdUsername");
+       //delete online presence
+       
       signOut(auth).catch(error => console.log('Error logging out: ', error));
     };
   
@@ -42,10 +46,11 @@ import React, {
       });
     }, [navigation]);
   
-    // useEffect(() => {
-    //   setMessages([
-  
-    // }, []);
+     useEffect(() => {
+      if(localStorage.getItem("createdUsername") !== null){
+        setShowChat(true)
+      }  
+     }, []);
   
     useLayoutEffect(() => {
       const collectionRef = collection(database, 'chats');
@@ -83,12 +88,18 @@ import React, {
       if(username.trim().length >=4 && username.trim() !== "")
       {
         setShowChat(true)
+        localStorage.setItem("createdUsername",username)
+        addDoc(collection(database, 'online'), {
+          userId: auth?.currentUser?.uid,
+          username: username??auth?.currentUser?.email.split("@")[0],
+          createdAt: new Date().toISOString(),
+        });
       }
     };
   
   
   return (
-    !showChat ? 
+    !(showChat) ? 
      ( 
        <>
       <TextInput

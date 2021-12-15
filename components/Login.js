@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from '../config/firebase';
 
+
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,10 +13,12 @@ export default function Login({ navigation }) {
   const onHandleLogin = () => {
     if (email !== '' && password !== '') {
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => console.log('Login success'))
+        .then(() => {console.log('Login success')})
         .catch(err => setError("Invalid credentials") /*console.log(`Login err: ${err}`)*/);
     }
   };
+
+
 
   return (
     <View style={styles.container}>
